@@ -108,6 +108,12 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
   }
 
   override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
+    def writeJavaEnumConst(w: IndentWriter, v: Any): Unit = v match {
+      case l: Long => w.w(l.toString)
+      case v: ConstRef => w.w(idJava.const(v))
+      case _ => throw new AssertionError("Only integers and other enum values are allowed as enum values")
+    }
+
     val refs = new JavaRefs()
 
     writeJavaFile(ident, origin, refs.java, w => {
@@ -116,7 +122,15 @@ class JavaGenerator(spec: Spec) extends Generator(spec) {
       w.w(s"public enum ${idJava.ty(ident)}").braced {
         for (o <- e.options) {
           writeDoc(w, o.doc)
-          w.wl(idJava.enum(o.ident) + ",")
+          w.w(idJava.enum(o.ident))
+          o.optval match {
+            case Some(optval) => {
+              w.w(" = ")
+              writeJavaEnumConst(w, optval)
+            }
+            case _ =>
+          }
+          w.wl(",")
         }
         w.wl(";")
       }

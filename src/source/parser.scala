@@ -98,8 +98,8 @@ private object IdlParser extends RegexParsers {
   }
 
   def enum: Parser[Enum] = "enum" ~> bracesList(enumOption) ^^ Enum.apply
-  def enumOption: Parser[Enum.Option] = doc ~ ident ^^ {
-    case doc~ident => Enum.Option(ident, doc)
+  def enumOption: Parser[Enum.Option] = doc ~ ident ~ opt("=" ~ value ^^ { case _~vl => vl }) ^^ {
+    case doc~ident~optval => Enum.Option(ident, doc, optval)
   }
 
   def interface: Parser[Interface] = "interface" ~> extInterface ~ bracesList(method | const) ^^ {

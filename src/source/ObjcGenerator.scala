@@ -62,6 +62,12 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
   }
 
   override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
+    val self = idObjc.ty(ident)
+    def writeObjcEnumConst(w: IndentWriter, v: Any): Unit = v match {
+      case l: Long => w.w(l.toString)
+      case v: ConstRef => w.w(self + idObjc.const(v))
+      case _ => throw new AssertionError("Only integers and other enum values are allowed as enum values")
+    }
     val refs = new ObjcRefs()
 
     refs.header.add("#import <Foundation/Foundation.h>")
@@ -73,7 +79,6 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
     refs.body.add("#import <Foundation/Foundation.h>")
     refs.body.add("!#import " + q(enumTranslatorHeaderName(ident)))
 
-    val self = idObjc.ty(ident)
     val cppSelf = withNs(spec.cppNamespace, idCpp.enumType(ident))
     val name = IdentStyle.camelUpper(ident)
     val argName = idObjc.local(ident.name)
@@ -83,9 +88,16 @@ class ObjcGenerator(spec: Spec) extends Generator(spec) {
       w.bracedSemi {
         for (i <- e.options) {
           writeDoc(w, i.doc)
-          w.wl(self + idObjc.enum(i.ident.name) + ",")
+          w.w(self + idObjc.enum(i.ident.name))
+          i.optval match {
+            case Some(optval) => {
+              w.w(" = ")
+              writeObjcEnumConst(w, optval)
+            }
+            case _ =>
+          }
+          w.wl(",")
         }
-        w.wl(self + "Count,")
       }
     })
 

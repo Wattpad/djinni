@@ -46,7 +46,7 @@ case class Const(ident: Ident, ty: TypeRef, value: Any, doc: Doc)
 
 case class Enum(options: Seq[Enum.Option]) extends TypeDef
 object Enum {
-  case class Option(ident: Ident, doc: Doc)
+  case class Option(ident: Ident, doc: Doc, optval: scala.Option[Any])
 }
 
 case class Record(ext: Ext, fields: Seq[Field], consts: Seq[Const], derivingTypes: Set[DerivingType]) extends TypeDef

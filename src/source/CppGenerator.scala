@@ -81,6 +81,12 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
   }
 
   override def generateEnum(origin: String, ident: Ident, doc: Doc, e: Enum) {
+    def writeCppEnumConst(w: IndentWriter, v: Any): Unit = v match {
+      case l: Long => w.w(l.toString)
+      case v: ConstRef => w.w(idCpp.const(v))
+      case _ => throw new AssertionError("Only integers and other enum values are allowed as enum values")
+    }
+
     val refs = new CppRefs(ident.name)
     val self = idCpp.enumType(ident)
 
@@ -92,7 +98,15 @@ class CppGenerator(spec: Spec) extends Generator(spec) {
       w.w(s"enum class $self : int").bracedSemi {
         for (o <- e.options) {
           writeDoc(w, o.doc)
-          w.wl(idCpp.enum(o.ident.name) + ",")
+          w.w(idCpp.enum(o.ident.name))
+          o.optval match {
+            case Some(optval) => {
+              w.w(" = ")
+              writeCppEnumConst(w, optval)
+            }
+            case None =>
+          }
+          w.wl(",")
         }
       }
     },
