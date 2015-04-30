@@ -46,6 +46,7 @@ package object generatorTools {
                    cppEitherTemplate: Option[String],
                    cppEitherHeader: Option[String],
                    cppEnumHashWorkaround: Boolean,
+                   cppEnumPrefix: String,
                    jniOutFolder: Option[File],
                    jniHeaderOutFolder: Option[File],
                    jniIncludePrefix: String,

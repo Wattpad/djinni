@@ -33,6 +33,7 @@ object Main {
     var cppEitherTemplate: Option[String] = None
     var cppEitherHeader: Option[String] = None
     var cppEnumHashWorkaround : Boolean = true
+    var cppEnumPrefix : String = "WP_"
     var javaOutFolder: Option[File] = None
     var javaPackage: Option[String] = None
     var javaCppException: Option[String] = None
@@ -231,6 +232,7 @@ object Main {
       cppEitherTemplate,
       cppEitherHeader,
       cppEnumHashWorkaround,
+      cppEnumPrefix,
       jniOutFolder,
       jniHeaderOutFolder,
       jniIncludePrefix,
