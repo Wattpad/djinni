@@ -315,14 +315,14 @@ namespace djinni
 			if (c.isLeft())
 			{
 				left = L::Boxed::fromCpp(jniEnv, c.left());
-				LocalRef<jobject> j(jniEnv, jniEnv->NewObject(data.clazz.get(), data.method_asLeft, &left));
+				LocalRef<jobject> j(jniEnv, jniEnv->CallStaticObjectMethod(data.clazz.get(), data.method_asLeft, get(left)));
 				jniExceptionCheck(jniEnv);
 				return j;
 			}
 			else
 			{
 				right = R::Boxed::fromCpp(jniEnv, c.right());
-				LocalRef<jobject> j(jniEnv, jniEnv->NewObject(data.clazz.get(), data.method_asRight, &right));
+				LocalRef<jobject> j(jniEnv, jniEnv->CallStaticObjectMethod(data.clazz.get(), data.method_asRight, get(right)));
 				jniExceptionCheck(jniEnv);
 				return j;
 			}
