@@ -59,7 +59,9 @@ package object generatorTools {
                    cppExt: String,
                    cppHeaderExt: String,
                    objcOutFolder: Option[File],
+                   objcHeaderOutFolder: Option[File],
                    objcppOutFolder: Option[File],
+                   objcppHeaderOutFolder: Option[File],
                    objcIdentStyle: ObjcIdentStyle,
                    objcFileIdentStyle: IdentConverter,
                    objcppExt: String,
@@ -188,12 +190,14 @@ package object generatorTools {
       if (spec.objcOutFolder.isDefined) {
         if (!spec.skipGeneration) {
           createFolder("Objective-C", spec.objcOutFolder.get)
+          createFolder("Objective-C header", spec.objcHeaderOutFolder.get)
         }
         new ObjcGenerator(spec).generate(idl)
       }
       if (spec.objcppOutFolder.isDefined) {
         if (!spec.skipGeneration) {
           createFolder("Objective-C++", spec.objcppOutFolder.get)
+          createFolder("Objective-C++ header", spec.objcppHeaderOutFolder.get)
         }
         new ObjcppGenerator(spec).generate(idl)
       }
