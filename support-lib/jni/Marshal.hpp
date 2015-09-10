@@ -289,7 +289,7 @@ namespace djinni
 		{
 			assert(j != nullptr);
 			const auto & data = JniClass<EitherJniInfo>::get();
-			assert(jniEnv->isInstanceOf(j, data.clazz.get()));
+			assert(jniEnv->IsInstanceOf(j, data.clazz.get()));
 			auto isLeft = jniEnv->CallBooleanMethod(j, data.method_isLeft);
 			auto isRight = jniEnv->CallBooleanMethod(j, data.method_isRight);
 			assert(isLeft || isRight);
