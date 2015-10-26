@@ -1,6 +1,7 @@
 #pragma once
 
 #include <boost/optional.hpp>
+#include <functional>
 
 using boost::optional;
 
@@ -17,6 +18,13 @@ public:
 
     LeftType left() const { return *mLeft; }
     RightType right() const { return *mRight; }
+
+    void withLeft(std::function<void(LeftType)> f) {
+        if (isLeft()) { f(left());  }
+    }
+    void withRight(std::function<void(RightType)> f) {
+        if (isRight()) { f(right()); }
+    }
 
 private:
     const optional<LeftType> mLeft;
