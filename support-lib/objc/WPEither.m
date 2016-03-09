@@ -37,4 +37,9 @@
     return nil;
 }
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"<%@: %p; left = %@; right = %@>",
+            NSStringFromClass(self.class), self, self.left, self.right];
+}
+
 @end
