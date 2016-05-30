@@ -115,11 +115,11 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
             case MOptional => throw new AssertionError("optional should have been special cased")
             case MEither => spec.objcEitherClass match {
               case None => throw new AssertionError("either class unspecified")
-              case Some(c) => (c, true)
+              case Some(c) => (c + tm.args.map(toObjcTemplateType).mkString("<", ", ", ">"), true)
             }
-            case MList => ("NSArray", true)
-            case MSet => ("NSSet", true)
-            case MMap => ("NSDictionary", true)
+            case MList => ("NSArray" + tm.args.map(toObjcTemplateType).mkString("<", ", ", ">"), true)
+            case MSet => ("NSSet" + tm.args.map(toObjcTemplateType).mkString("<", ", ", ">"), true)
+            case MMap => ("NSDictionary" + tm.args.map(toObjcTemplateType).mkString("<", ", ", ">"), true)
             case d: MDef => d.defType match {
               case DEnum => if (needRef) ("NSNumber", true) else (idObjc.ty(d.name), false)
               case DRecord => (idObjc.ty(d.name), true)
@@ -145,6 +145,11 @@ class ObjcMarshal(spec: Spec) extends Marshal(spec) {
   def toObjcParamType(tm: MExpr): String = {
     val (name, needRef) = toObjcType(tm)
     name + (if(needRef) " *" else "")
+  }
+
+  def toObjcTemplateType(tm: MExpr): String = {
+    val (name, _) = toObjcType(tm, true)
+    name + " *"
   }
 
 }
