@@ -19,10 +19,10 @@ public:
     LeftType left() const { return *mLeft; }
     RightType right() const { return *mRight; }
 
-    void withLeft(std::function<void(LeftType)> f) {
+    void withLeft(std::function<void(LeftType)> f) const {
         if (isLeft()) { f(left());  }
     }
-    void withRight(std::function<void(RightType)> f) {
+    void withRight(std::function<void(RightType)> f) const {
         if (isRight()) { f(right()); }
     }
 
